@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block title %} About {% endblock title %}
+
+
+{% block content %}
+    
+    {% if not user.is_authenticated  %}
+        <br>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Go Back</a>
+    {% endif %}    
+    
+    <div class="align-middle" style="color: #4caf50; font-style: bold; font-size: 3rem;">SGI</div>
+    <div class="align-middle" style="color: rgb(73, 73, 73)">Sistema de gestion de Inventario</div>
+    <br><br>
+
+    <div class="align-middle"> 
+        <h2 style="color:#4caf50">| Sobre |</h3> <br>
+            <p>
+                SGI es un sencillo software de gestión de inventario creado para las necesidades de una empresa.
+                El software es capaz de realizar un seguimiento del stock entrante y saliente con una factura renderizada dinámicamente. 
+                A cada proveedor se le proporciona un perfil donde puede ver el historial de sus transacciones con la empresa.
+            </p>
+        <br>
+    </div>
+        <h2 style="color:#4caf50" class="align-middle">| Características |</h3> <br>
+            <ul style="display:table; margin:0 auto; ">                
+                <li style="color:#494949;">Gráfico interactivo para mostrar el stock disponible actual</li>
+                <li style="color:#494949;">Se mantienen los detalles del stock, como el stock disponible actual.</li>
+                <li style="color:#494949;">Las transacciones entrantes se realizan a través de compras.</li>
+                <li style="color:#494949;">Las transacciones salientes se realizan a través de ventas.</li>
+                <li style="color:#494949;">Cada transacción realizada a través del software se registra</li>
+                <li style="color:#494949;">La factura se representa dinámicamente y se puede imprimir.</li>
+                <li style="color:#494949;">Se mantienen perfiles separados para proveedores.</li>
+            </ul>  
+        <br>
+    <div class="align-middle">
+        <h2 style="color:#4caf50" >| Desarrollado por |</h3> <br>
+            <p>Ale</p>
+            <br><br><br>
+    </div>
+
+{% endblock content %}
