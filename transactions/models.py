@@ -1,5 +1,7 @@
 from django.db import models
 from inventory.models import Stock
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 #contains suppliers
 class Supplier(models.Model):
@@ -44,6 +46,11 @@ class PurchaseItem(models.Model):
 
     def __str__(self):
 	    return "Bill no: " + str(self.billno.billno) + ", Item = " + self.stock.name
+ 
+@receiver(post_save, sender=PurchaseItem)
+def update_stock_on_purchase(sender, instance, **kwargs):
+    instance.stock.quantity += instance.quantity
+    instance.stock.save()
 
 #contains the other details in the purchases bill
 class PurchaseBillDetails(models.Model):
@@ -91,14 +98,19 @@ class SaleBill(models.Model):
 
 #contains the sale stocks made
 class SaleItem(models.Model):
-    billno = models.ForeignKey(SaleBill, on_delete = models.CASCADE, related_name='salebillno')
-    stock = models.ForeignKey(Stock, on_delete = models.CASCADE, related_name='saleitem')
+    billno = models.ForeignKey(SaleBill, on_delete=models.CASCADE, related_name='salebillno')
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='saleitem')
     quantity = models.IntegerField(default=1)
     perprice = models.IntegerField(default=1)
     totalprice = models.IntegerField(default=1)
 
     def __str__(self):
-	    return "Bill no: " + str(self.billno.billno) + ", Item = " + self.stock.name
+        return f"Bill no: {self.billno.billno}, Item = {self.stock.name}"
+
+@receiver(post_save, sender=SaleItem)
+def update_stock_on_sale(sender, instance, **kwargs):
+    instance.stock.update_quantity_on_sale(instance.quantity)
+    
 
 #contains the other details in the sales bill
 class SaleBillDetails(models.Model):

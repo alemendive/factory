@@ -28,8 +28,10 @@ class PurchaseItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['stock'].queryset = Stock.objects.filter(is_deleted=False)
         self.fields['stock'].widget.attrs.update({'class': 'textinput form-control setprice stock', 'required': 'true'})
-        self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control setprice quantity', 'min': '0', 'required': 'true'})
-        self.fields['perprice'].widget.attrs.update({'class': 'textinput form-control setprice price', 'min': '0', 'required': 'true'})
+        # Configuración de cantidad y precio para aceptar decimales
+        self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control setprice quantity', 'min': '0', 'step': '0.01', 'required': 'true'})
+        self.fields['perprice'].widget.attrs.update({'class': 'textinput form-control setprice price', 'min': '0', 'step': '0.01', 'required': 'true'})
+    
     class Meta:
         model = PurchaseItem
         fields = ['stock', 'quantity', 'perprice']
@@ -91,13 +93,16 @@ class SaleItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['stock'].queryset = Stock.objects.filter(is_deleted=False)
         self.fields['stock'].widget.attrs.update({'class': 'textinput form-control setprice stock', 'required': 'true'})
-        self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control setprice quantity', 'min': '0', 'required': 'true'})
-        self.fields['perprice'].widget.attrs.update({'class': 'textinput form-control setprice price', 'min': '0', 'required': 'true'})
+        # Configuración de cantidad y precio para aceptar decimales
+        self.fields['quantity'].widget.attrs.update({'class': 'textinput form-control setprice quantity', 'min': '0', 'step': '0.01', 'required': 'true'})
+        self.fields['perprice'].widget.attrs.update({'class': 'textinput form-control setprice price', 'min': '0', 'step': '0.01', 'required': 'true'})
+    
     class Meta:
         model = SaleItem
         fields = ['stock', 'quantity', 'perprice']
 
-# formset used to render multiple 'SaleItemForm'
+# Formsets de los formularios actualizados
+PurchaseItemFormset = formset_factory(PurchaseItemForm, extra=1)
 SaleItemFormset = formset_factory(SaleItemForm, extra=1)
 
 # form used to accept the other details for sales bill
