@@ -10,12 +10,6 @@
 
 <br>
 
-{% comment %} <div id="container" style="position: relative; height:45vh; border: 1.2mm ridge #4e6570; border-radius: 30px;" class="align-middle table-bordered">
-    <canvas id="bar-graph"></canvas>
-</div> {% endcomment %}
-
-<br>
-
 <div class="row">
     <div class="col-md-6">
         <a href="{% url 'select-supplier' %}" class="btn btn-success btn-lg btn-block btn-huge">Nueva compra de Stock</a>
@@ -67,94 +61,7 @@
         </div>
     </div>
 
-    <script>
-        // Verifica que los datos se están imprimiendo correctamente
-        console.log("Data values:", {{ data|safe }});
-        console.log("Labels values:", {{ labels|safe }});
-    </script>
-
-
-
-
-    <script src="{% static 'js/Chart.min.js' %}"></script>
-<!-- Loading Chart JS -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var dataValues = {{ data|safe }};
-        var labelsValues = {{ labels|safe }};
-        var minStockValues = {{ min_stock|safe }};
-
-        var combined = labelsValues.map((label, index) => ({
-            label: label,
-            value: dataValues[index],
-            minValue: minStockValues[index]
-        }));
-        combined.sort((a, b) => a.value - b.value);
-
-        var sortedLabels = combined.map(item => item.label);
-        var sortedData = combined.map(item => item.value);
-        var sortedMinStock = combined.map(item => item.minValue);
-
-        var barConfig = {
-            type: 'bar',
-            data: {
-                labels: sortedLabels,
-                datasets: [
-                    {
-                        backgroundColor: '#1a79a5',
-                        label: 'Stock',
-                        data: sortedData,
-                        barThickness: 20,
-                    },
-                    {
-                        backgroundColor: '#ff6347',
-                        label: 'Mínimo de Seguridad',
-                        data: sortedMinStock,
-                        barThickness: 20,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) { return parseFloat(value).toFixed(2); }
-                        }
-                    },
-                    x: {
-                        stacked: false,
-                        ticks: {
-                            maxTicksLimit: 10 // Limitar el número de etiquetas
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top', // Cambia la posición de la leyenda
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.raw;
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        var ctx = document.getElementById('bar-graph').getContext('2d');
-        if (dataValues && labelsValues) {
-            window.BarStock = new Chart(ctx, barConfig);
-        } else {
-            console.error("Error: Datos no cargados correctamente.");
-        }
-    });
-</script>
-
+    
 
 
 {% endblock content %}
